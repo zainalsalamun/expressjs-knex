@@ -4,12 +4,32 @@ const app = express();
 const db = require('./db');
 
 app.use(express.json());
+app.set('view engine', 'ejs');
+app.set('views', './views');
 
 app.get('/karyawan', async (req, res) => {
     const karyawan = await db('karyawan').select('*');
     return res.json({
         data:karyawan
     });
+});
+
+app.get('/', async (req, res) => {
+    const karyawan = await db('karyawan').select('*');
+    res.render('index', { data: karyawan });
+});
+
+// Add or Update Data
+app.post('/save', (req, res) => {
+    const { id, nama, jabatan } = req.body;
+
+    res.redirect('/');
+});
+
+// Delete Data
+app.post('/delete', (req, res) => {
+    const { id } = req.body;
+    res.redirect('/');
 });
 
 app.get('/karyawan/:id', async (req, res) => {
